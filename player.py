@@ -10,7 +10,7 @@ SC_DECIMAL = {
     "ALT": 56, "SPACE": 57, "CTRL": 29, "SHIFT": 42,
     "A": 30, "S": 31, "D": 32, "F": 33,
     "Q": 16, "W": 17, "E": 18, "R": 19,
-    "1": 2, "2": 3, "3": 4, "4": 5
+    "0": 1, "1": 2, "2": 3, "3": 4, "4": 5, "5": 6, "6": 7
 }
 
 # Change these to your own settings.
@@ -57,12 +57,18 @@ class Player:
         else:
             self.context.send(self.device, key_stroke(SC_DECIMAL[key], 0, 0))
 
+    def cast_buffs(self, keys):
+        for key in keys:
+            self.press(key)
+            time.sleep(1)
+
     def go_to(self, target):
         """
         Attempts to move player to a specific (x, y) location on the screen.
         """
         while True:
             player_location = self.game.get_player_location()
+            #print(f"Initial player location is: {player_location}") 
             if player_location is None:
                 continue
 
@@ -86,11 +92,14 @@ class Player:
                     self.press(JUMP_KEY)
                 # Player is below target y-position.
                 else:
-                    if y1 - y2 > 30:
-                        self.press(ROPE_LIFT_KEY)
-                    else:
-                        self.press("UP")
-                        self.press("UP")
+                    #if y1 - y2 > 30:
+                        #self.press(ROPE_LIFT_KEY)
+                    #else:
+                        # TODO: Jumping up will differ per job. Create separate handler and fix
+                        #self.press("ALT")
+                        #self.press("UP")
+                        #self.press("UP")
+                    self.press(ROPE_LIFT_KEY)
                 # Delay for player falling down or jumping up.
                 time.sleep(1)
             else:
