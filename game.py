@@ -78,3 +78,11 @@ class Game:
         """
         location = self.locate(ENEMY_BGRA, GUILD_BGRA, BUDDY_BGRA)
         return len(location) > 0
+
+    # TODO
+    def is_elite_boss_active(self):
+        """
+        Returns True/False based on algorithm reading corner pixel colors to determine if elite boss has spawned
+        """
+        return False
+

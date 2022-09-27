@@ -36,6 +36,9 @@ This video was recorded on an a friend's account, all actions taken by the chara
 
 https://user-images.githubusercontent.com/72103178/129638001-5dda39d8-910a-4450-882a-3791587bbb69.mp4
 
+### Useful Tools
+Pixel/color analysis from screenshot: https://yangcha.github.io/iview/iview.html
+
 
 ## Credits
 * The high-speed screen capture program used in this project was created by Dustin. It is functional in a VM and is immensely faster than PyAutoGui and d3dshot.
