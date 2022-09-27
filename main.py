@@ -1,7 +1,6 @@
 from interception import *
 from game import Game
-from player import Player
-from map import Map
+from classes.bow_master import BowMaster
 
 def bind(context):
     context.set_filter(interception.is_keyboard, interception_filter_key_state.INTERCEPTION_FILTER_KEY_ALL.value)
@@ -20,19 +19,20 @@ if __name__ == "__main__":
     c = interception()      
     d = bind(c)
 
+    # Define buff keys
+    BUFF_90 = ("Q", "W", "1")
+    BUFF_120 = ("2", "3", "6")
+
     # Script for Bowmaster @ SSS1
     g = Game((5, 60, 180, 130))
-    p = Player(c, d, g)
-    m = Map(p, g)
-    # target = (97, 32.5)
-    target = (97.5, 48.5)
+    # p = Player(c, d, g)
+    p = BowMaster(c,d,g, BUFF_90, BUFF_120)
 
-    m.run_es()
+    p.run_es()
    
 
         # TODO: Totem Use and equip every 2 hours 
         # TODO: Familiar
         # TODO: Anti bot alert
-        # TODO: CC For better flame
-        # TODO: class specific stuff
-        # TODO: Black mage spawn
+        # TODO: CC For better Burning
+        # TODO: EB spawn handler

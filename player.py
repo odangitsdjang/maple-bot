@@ -1,7 +1,11 @@
 from interception.stroke import key_stroke
+from rune_solver import find_arrow_directions
 import time
+import random
+
 
 # Scancodes for arrow and alphanumeric/modifier keys should be separated. They have different key-states.
+# TODO: move to constants file
 SC_DECIMAL_ARROW = {
     "LEFT": 75, "RIGHT": 77, "DOWN": 80, "UP": 72,
 }
@@ -21,6 +25,8 @@ ROPE_LIFT_KEY = "D"
 class Player:
     def __init__(self, context, device, game):
         self.game = game
+        self.constants = {"JUMP_KEY": JUMP_KEY, "ROPE_LIFT_KEY": ROPE_LIFT_KEY,
+                          "SC_DECIMAL_ARROW": SC_DECIMAL_ARROW, "SC_DECIMAL": SC_DECIMAL}
         # interception
         self.context = context
         self.device = device
@@ -62,6 +68,24 @@ class Player:
             self.press(key)
             time.sleep(1)
 
+    def jump(self):
+        self.press(self.constants.JUMP_KEY)
+
+    def double_jump_att(self):
+        self.jump()
+        time.sleep(random.uniform(0.1, 0.3))
+        self.jump()
+        time.sleep(random.uniform(0.1, 0.2))
+        self.press("SHIFT")
+        time.sleep(random.uniform(0.55, 0.65))
+
+    def jump_up(self):
+        self.hold("UP")
+        self.jump()
+        self.jump()
+
+        self.release("UP")
+
     def go_to(self, target):
         """
         Attempts to move player to a specific (x, y) location on the screen.
@@ -95,10 +119,8 @@ class Player:
                     #if y1 - y2 > 30:
                         #self.press(ROPE_LIFT_KEY)
                     #else:
-                        # TODO: Jumping up will differ per job. Create separate handler and fix
-                        #self.press("ALT")
-                        #self.press("UP")
-                        #self.press("UP")
+                        # TODO: Test
+                        #self.jump_up()
                     self.press(ROPE_LIFT_KEY)
                 # Delay for player falling down or jumping up.
                 time.sleep(1)
@@ -112,3 +134,41 @@ class Player:
                 if abs(x2 - x1) > 30:
                     self.press(JUMP_KEY)
                     self.press(JUMP_KEY)
+
+    def solve_rune(self, target):
+        """
+        Given the (x, y) location of a rune, the bot will attempt to move the player to the rune and solve it.
+        """
+        while True:
+            g = self.game
+            print("Pathing towards rune...")
+            self.go_to(target)
+            # Activate the rune.
+            time.sleep(1)
+            self.press("SPACE")
+            # Take a picture of the rune.
+            time.sleep(1)
+            img = g.get_rune_image()
+            print("Attempting to solve rune...")
+            directions = find_arrow_directions(img)
+
+            if len(directions) == 4:
+                print(f"Directions: {directions}.")
+                for d, _ in directions:
+                    self..press(d)
+
+                # The player dot will be blocking the rune dot, attempt to move left/right to unblock it.
+                self.hold("LEFT")
+                time.sleep(random.uniform(0.5, 1.25))
+                self.release("LEFT")
+
+                self.hold("RIGHT")
+                time.sleep(random.uniform(0.5, 1.25))
+                self.release("RIGHT")
+
+                rune_location = g.get_rune_location()
+                if rune_location is None:
+                    print("Rune has been solved.")
+                    break
+                else:
+                    print("Trying again...")

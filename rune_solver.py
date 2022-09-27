@@ -15,7 +15,7 @@ def find_arrow_directions(img, debug=False):
     m, n = len(h), len(h[0])
     valid_gradient = []
     directions = []
-
+    # TODO: capture failures and debug
     if debug:
         visited = [[False for _ in range(n)] for _ in range(m)]
         canvas = np.zeros(img.shape[:2], dtype="uint8")
@@ -110,6 +110,8 @@ def find_arrow_directions(img, debug=False):
             return None
 
     # The rune captcha was observed to appear within this part of the application window on 800x600 resolution.
+    # TODO: update for 1080p resolution
+    # TODO: Ideal: detect resolution and put in custom ranges
     for r in range(150, 275):
         for c in range(150, 650):
             # Arrows start at a red-ish color and are around 15 pixels apart.
