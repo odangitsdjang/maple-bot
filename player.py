@@ -25,7 +25,8 @@ ROPE_LIFT_KEY = "D"
 class Player:
     def __init__(self, context, device, game):
         self.game = game
-        self.constants = {JUMP_KEY: JUMP_KEY, ROPE_LIFT_KEY: ROPE_LIFT_KEY, SC_DECIMAL: SC_DECIMAL, SC_DECIMAL_ARROW: SC_DECIMAL_ARROW}
+        self.constants = {"JUMP_KEY": JUMP_KEY, "ROPE_LIFT_KEY": ROPE_LIFT_KEY,
+                          "SC_DECIMAL_ARROW": SC_DECIMAL_ARROW, "SC_DECIMAL": SC_DECIMAL}
         # interception
         self.context = context
         self.device = device
@@ -139,13 +140,13 @@ class Player:
         Given the (x, y) location of a rune, the bot will attempt to move the player to the rune and solve it.
         """
         while True:
-            p = self.p
-            g = self.g
+            g = self.game
             print("Pathing towards rune...")
-            p.go_to(target)
+            self.go_to(target)
             # Activate the rune.
             time.sleep(1)
-            p.press("SPACE")
+            self.press("SPACE")
+
             # Take a picture of the rune.
             time.sleep(1)
             img = g.get_rune_image()
@@ -155,16 +156,16 @@ class Player:
             if len(directions) == 4:
                 print(f"Directions: {directions}.")
                 for d, _ in directions:
-                    p.press(d)
+                    self..press(d)
 
                 # The player dot will be blocking the rune dot, attempt to move left/right to unblock it.
-                p.hold("LEFT")
+                self.hold("LEFT")
                 time.sleep(random.uniform(0.5, 1.25))
-                p.release("LEFT")
+                self.release("LEFT")
 
-                p.hold("RIGHT")
+                self.hold("RIGHT")
                 time.sleep(random.uniform(0.5, 1.25))
-                p.release("RIGHT")
+                self.release("RIGHT")
 
                 rune_location = g.get_rune_location()
                 if rune_location is None:
