@@ -19,13 +19,14 @@ SC_DECIMAL = {
 
 # Change these to your own settings.
 JUMP_KEY = "ALT"
+ATTACK_KEY = "SHIFT"
 ROPE_LIFT_KEY = "D"
 
 
 class Player:
     def __init__(self, context, device, game):
         self.game = game
-        self.constants = {"JUMP_KEY": JUMP_KEY, "ROPE_LIFT_KEY": ROPE_LIFT_KEY,
+        self.constants = {"JUMP_KEY": JUMP_KEY, "ATTACK_KEY": ATTACK_KEY, "ROPE_LIFT_KEY": ROPE_LIFT_KEY,
                           "SC_DECIMAL_ARROW": SC_DECIMAL_ARROW, "SC_DECIMAL": SC_DECIMAL}
         # interception
         self.context = context
@@ -69,14 +70,18 @@ class Player:
             time.sleep(1)
 
     def jump(self):
-        self.press(self.constants.JUMP_KEY)
+        self.press(self.constants["JUMP_KEY"])
+
+    def double_jump(self):
+        self.jump()
+        self.jump()
 
     def double_jump_att(self):
         self.jump()
         time.sleep(random.uniform(0.1, 0.3))
         self.jump()
         time.sleep(random.uniform(0.1, 0.2))
-        self.press("SHIFT")
+        self.press(self.constants["ATTACK_KEY"])
         time.sleep(random.uniform(0.55, 0.65))
 
     def jump_up(self):
@@ -113,7 +118,7 @@ class Player:
                 # Player is above target y-position.
                 elif y1 < y2:
                     self.hold("DOWN")
-                    self.press(JUMP_KEY)
+                    self.jump()
                 # Player is below target y-position.
                 else:
                     #if y1 - y2 > 30:
@@ -132,8 +137,7 @@ class Player:
                 else:
                     self.hold("LEFT")
                 if abs(x2 - x1) > 30:
-                    self.press(JUMP_KEY)
-                    self.press(JUMP_KEY)
+                    self.double_jump()
 
     def solve_rune(self, target):
         """
@@ -156,7 +160,7 @@ class Player:
             if len(directions) == 4:
                 print(f"Directions: {directions}.")
                 for d, _ in directions:
-                    self..press(d)
+                    self.press(d)
 
                 # The player dot will be blocking the rune dot, attempt to move left/right to unblock it.
                 self.hold("LEFT")

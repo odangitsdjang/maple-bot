@@ -20,11 +20,10 @@ class BowMaster(Player):
         target = (18, 31.5)
         time_90 = time.time()
         time_120 = time_90
-        p = self.p
-        g = self.g
+        g = self.game
 
         # TODO: add functionality to start the bot with no rune for first 15 mins
-        p.cast_buffs(self.buff_120)
+        self.cast_buffs(self.buff_120)
 
         while True:
             # TODO: refactor g.check_other_player, g.check_rune
@@ -49,25 +48,25 @@ class BowMaster(Player):
             elapsed_120 = current - time_120
             print(f"elapsed_90: {elapsed_90}, elapsed_120: {elapsed_120}")
             if elapsed_90 > 90:
-                p.cast_buffs(self.buff_90)
+                self.cast_buffs(self.buff_90)
                 time_90 = current
             if elapsed_120 > 120:
-                p.cast_buffs(self.buff_120)
+                self.cast_buffs(self.buff_120)
                 time_120 = current
 
-            p.go_to(target)
+            self.go_to(target)
             time.sleep(random.uniform(0.4, 0.6))
 
             # each loop takes ~14s
             for interval in range(2):
-                p.hold("RIGHT")
+                self.hold("RIGHT")
                 for _ in range(5):
-                    p.double_jump_att()
-                p.release("RIGHT")
+                    self.double_jump_att()
+                self.release("RIGHT")
                 time.sleep(random.uniform(0.4, 0.6))
-                p.hold("LEFT")
+                self.hold("LEFT")
                 for _ in range(5):
-                    p.double_jump_att()
-                p.release("LEFT")
+                    self.double_jump_att()
+                self.release("LEFT")
                 time.sleep(random.uniform(0.4, 0.6))
             time.sleep(random.uniform(0.4, 0.6))
